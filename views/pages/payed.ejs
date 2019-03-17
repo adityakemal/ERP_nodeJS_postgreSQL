@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <!-- head here -->
+  <% include ../partials/head.ejs %>
+</head>
+
+<body>
+  <div class="container">
+
+  <!-- header here -->
+  <% include ../partials/header.ejs %>
+
+
+  <!-- bloc-0 -->
+
+  <center>
+    <br>
+    <h1>Furniture yang sudah di bayar</h1>
+    <h6><i>mohon di tnggu pesanan sedang kami antar</i></h6>
+  </center>
+<div class="row">
+  <% for( prod of beli){  %>
+  <div class="card" style="width: 18rem;">
+    <img class="card-img-top" src="http://gondwanaclub.com/wp-content/uploads/2017/04/dummy-400x250.jpg" alt="Card image cap">
+    <div class="card-body">
+      <h5 class="card-title"><%= prod.productName %></h5>
+      <p class="card-text"><%= prod.description %></p>
+      <h6>Rp<%= prod.price %></h6>
+      <b> BARANG SEDANG DIKIRIM</b>
+
+    </div>
+  </div>
+  <br>
+  <% } %>
+</div>
+
+
+
+</div>
+  <!-- main here -->
+
+
+  <!-- footer here -->
+  <% include ../partials/footer.ejs %>
+
+</body>
+
+</html>
