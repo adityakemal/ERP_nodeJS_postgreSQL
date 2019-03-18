@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <!-- head here -->
+  <% include ../partials/head.ejs %>
+</head>
+
+<body>
+  <div class="container">
+
+  <!-- header here -->
+  <% include ../partials/nav-admin.ejs %>
+
+  <!-- main here -->
+  <center>
+    <br>
+    <h1>Our Products</h1>
+  </center>
+<center>
+  <div class="row">
+    <% for( prod of products){  %>
+    <div class="card" style="width: 17rem;">
+      <img class="card-img-top" src="http://gondwanaclub.com/wp-content/uploads/2017/04/dummy-400x250.jpg" alt="Card image cap">
+      <div class="card-body">
+        <h5 class="card-title"><%= prod.productName %></h5>
+        <p class="card-text"><%= prod.description %></p>
+        <h6>Rp<%= prod.price %></h6>
+        <form  action="/order/<%=prod.id %>" method="post">
+          <button type="submit"class="btn btn-primary">Order</button>
+
+        </form>
+      </div>
+    </div>
+    <br>
+    <% } %>
+  </div>
+</center>
+
+
+
+
+
+  </div>
+
+  <!-- footer here -->
+  <% include ../partials/footer.ejs %>
+
+</body>
+
+</html>

@@ -37,7 +37,7 @@ app.get('/', (req, res) => {
 
   }
 })
-
+//LOGIN
 app.post('/login', function(req, res) {
   user.findOne({
     where: {
@@ -47,18 +47,19 @@ app.post('/login', function(req, res) {
     if (data == 0) {
       console.log('data kosong');
       res.redirect('/')
-    } else if (data.isAdmin ===  true && data.password === "admin" ) {
-      req.session.admin = data.isAdmin
-      res.redirect('/panel')
-
     }else if (data.password === req.body.password) {
-
+      if (data.isAdmin === true) {
+        req.session.admin = data.isAdmin
+        res.redirect('/panel')
+      }
       req.session.user = data.id
 
       res.redirect('/product')
       res.end()
     }
     res.redirect('/')
+    res.end()
+
 
   }).catch((err) => {
     console.log(err);
@@ -66,7 +67,11 @@ app.post('/login', function(req, res) {
   })
 })
 
+//panel admin
 app.get('/panel', (req, res) => {
+  if (!req.session.admin) {
+    res.redirect('/')
+  }
   order.findAll({
     include : [{model: user}, {model: product}]
   }).then((data)=>{
@@ -90,9 +95,6 @@ app.get('/logout', (req, res) => {
 })
 
 
-
-
-
 app.get('/product', (req, res) => {
   if (!req.session.user) {
     res.redirect('/')
@@ -106,6 +108,18 @@ app.get('/product', (req, res) => {
   })
 })
 
+app.get('/panel/product', (req, res) => {
+  if (!req.session.admin) {
+    res.redirect('/')
+  }
+  product.findAll().then((products) => {
+    res.render('pages/admin-product-list.ejs', {
+      products
+    })
+  }).catch((err) => {
+    console.log(err);
+  })
+})
 
 
 app.get('/user', (req, res) => {
@@ -198,14 +212,22 @@ if (!req.session.user) {
   })
 })
 
-app.post('/product', (req, res) => {
+//create product
+app.get('/panel/create-product', (req,res)=>{
+  res.render('pages/create-product.ejs')
+})
+
+app.post('/create-product', (req, res) => {
+  if (!req.session.admin) {
+    res.redirect('/')
+  }
   product.create({
     productName: req.body.productName,
     description: req.body.description,
     price: req.body.price,
   }).then((product) => {
     console.log(product);
-    res.redirect('/')
+    res.redirect('/panel/create-product')
   }).catch((err) => {
     console.log('costumerDb :', err);
   })
