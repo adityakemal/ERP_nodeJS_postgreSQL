@@ -39,10 +39,6 @@ app.get('/', (req, res) => {
 })
 
 app.post('/login', function(req, res) {
-  var supUser = {
-    fullName : 'admin',
-    password : 'admin'
-  }
   user.findOne({
     where: {
       fullName: req.body.fullName
@@ -51,14 +47,16 @@ app.post('/login', function(req, res) {
     if (data == 0) {
       console.log('data kosong');
       res.redirect('/')
-    } else if (data.password === req.body.password) {
+    } else if (data.isAdmin ===  true && data.password === "admin" ) {
+      req.session.admin = data.isAdmin
+      res.redirect('/panel')
+
+    }else if (data.password === req.body.password) {
 
       req.session.user = data.id
 
       res.redirect('/product')
       res.end()
-    }else if (data.fullName === supUser.fullName && data.password === supUser.password ) {
-      res.redirect('/panel')
     }
     res.redirect('/')
 
@@ -72,7 +70,17 @@ app.get('/panel', (req, res) => {
   order.findAll({
     include : [{model: user}, {model: product}]
   }).then((data)=>{
-    res.send(data)
+    // res.send(data)
+    console.log('transaksi :',data.length)
+    console.log(data.length)
+    var arr = []
+    for (d of data) {
+      d.statusOrder === true ? d.statusOrder = 'SUDAH' : d.statusOrder = 'belum'
+      console.log(`${d.User.fullName} membeli ${d.Product.productName} dengan harga ${d.Product.price} di kirim ke : ${d.User.address} status pembayaran ${d.statusOrder}`);
+      arr.push([d.User.fullName,d.Product.productName,d.Product.price,d.User.address,d.statusOrder])
+    }
+    console.log(arr);
+    res.render('pages/panel',{data : arr})
   })
 })
 
@@ -153,14 +161,14 @@ app.post('/order/:productId', (req, res) => {
 
 })
 //ganti status orderan bayar
-app.post('/status-order/:productId',(req,res)=>{
+app.post('/status-order/:orderId',(req,res)=>{
   if (!req.session.user) {
     res.redirect('/')
   }
   order.findOne({
     where :{
       costumerId : req.session.user,
-      productId : req.params.productId
+      id : req.params.orderId
     }
   }).then((data)=>{
     if (data === null) {
@@ -175,14 +183,14 @@ app.post('/status-order/:productId',(req,res)=>{
   })
 })
 //delete status
-app.post('/delete-order/:productId',(req,res)=>{
+app.post('/delete-order/:orderId',(req,res)=>{
 if (!req.session.user) {
   res.redirect('/')
 }
   order.destroy({
     where :{
       costumerId : req.session.user,
-      productId : req.params.productId
+      id : req.params.orderId
     }
   }).then((data)=>{
     console.log('berhasil di hapus');
@@ -237,13 +245,11 @@ app.get('/orders', (req, res) => {
     }]
   }).then(function(data) {
     console.log(data.length);
-    var arr = []
-    for (var i in data) {
-      arr.push(data[i].Product);
-    }
-    // console.log(arr);
+
+
+    // res.send(data)
     res.render('pages/myorder', {
-      beli: arr
+      data: data
     })
   })
 })

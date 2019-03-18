@@ -20,17 +20,17 @@
     <h6><i>segera bayar pesanan anda</i></h6>
   </center>
 <div class="row">
-  <% for( prod of beli){  %>
+  <% for( d of data){  %>
   <div class="card" style="width: 18rem;">
     <img class="card-img-top" src="http://gondwanaclub.com/wp-content/uploads/2017/04/dummy-400x250.jpg" alt="Card image cap">
     <div class="card-body">
-      <h5 class="card-title"><%= prod.productName %></h5>
-      <p class="card-text"><%= prod.description %></p>
-      <h6>Rp<%= prod.price %></h6>
-      <form  action="/status-order/<%=prod.id %>" method="post">
+      <h5 class="card-title"><%= d.Product.productName %></h5>
+      <p class="card-text"><%= d.Product.description %></p>
+      <h6>Rp<%= d.Product.price %></h6>
+      <form  action="/status-order/<%=d.id %>" method="post">
         <button type="submit"class="btn btn-primary">bayar</button>
       </form>
-      <form  action="/delete-order/<%=prod.id %>" method="post">
+      <form  action="/delete-order/<%=d.id %>" method="post">
         <button type="submit"class="btn btn-danger">Delete</button>
       </form>
     </div>

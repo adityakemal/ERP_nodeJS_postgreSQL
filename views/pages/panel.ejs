@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <!-- head here -->
+  <% include ../partials/head.ejs %>
+</head>
+
+<body>
+
+  <div class="container">
+
+  <!-- header here -->
+  <% include ../partials/nav-admin.ejs %>
+
+
+
+  <!-- main here -->
+  <center>
+    <br>
+    <h1>Transaction</h1>
+    <br>
+  </center>
+  <h4> Ada <b><%=data.length%></b> transaksi</h4>
+
+<center>
+  <table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Nama</th>
+      <th scope="col">Barang</th>
+      <th scope="col">Harga</th>
+      <th scope="col">Alamat</th>
+      <th scope="col">Status Pembayaran</th>
+    </tr>
+  </thead>
+  <tbody>
+      <%for (i in data){%>
+        <tr>
+          <th scope="row"><%= eval(i)+1 %></th>
+          <td><%=data[i][0]%></td>
+          <td><%=data[i][1]%></td>
+          <td><%=data[i][2]%></td>
+          <td><%=data[i][3]%></td>
+          <td><%=data[i][4]%></td>
+        </tr>
+
+      <%}%>
+  </tbody>
+</table>
+</center>
+
+
+
+
+
+  </div>
+
+  <!-- footer here -->
+  <% include ../partials/footer.ejs %>
+
+</body>
+
+</html>
