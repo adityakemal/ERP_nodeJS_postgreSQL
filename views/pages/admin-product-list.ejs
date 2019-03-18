@@ -26,9 +26,8 @@
         <h5 class="card-title"><%= prod.productName %></h5>
         <p class="card-text"><%= prod.description %></p>
         <h6>Rp<%= prod.price %></h6>
-        <form  action="/order/<%=prod.id %>" method="post">
-          <button type="submit"class="btn btn-primary">Order</button>
-
+        <form  action="/delete/<%=prod.id %>" method="post">
+          <button type="submit"class="btn btn-danger">Delete</button>
         </form>
       </div>
     </div>

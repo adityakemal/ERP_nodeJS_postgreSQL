@@ -22,16 +22,29 @@
   </center>
 <div class="row">
   <% for( prod of beli){  %>
-  <div class="card" style="width: 18rem;">
-    <img class="card-img-top" src="http://gondwanaclub.com/wp-content/uploads/2017/04/dummy-400x250.jpg" alt="Card image cap">
-    <div class="card-body">
-      <h5 class="card-title"><%= prod.productName %></h5>
-      <p class="card-text"><%= prod.description %></p>
-      <h6>Rp<%= prod.price %></h6>
-      <b> BARANG SEDANG DIKIRIM</b>
 
+    <%if(prod != null){%>
+    <div class="card" style="width: 18rem;">
+      <img class="card-img-top" src="http://gondwanaclub.com/wp-content/uploads/2017/04/dummy-400x250.jpg" alt="Card image cap">
+      <div class="card-body">
+        <h5 class="card-title"><%= prod.productName %></h5>
+        <p class="card-text"><%= prod.description %></p>
+        <h6>Rp<%= prod.price %></h6>
+        <b> BARANG SEDANG DIKIRIM</b>
+      </div>
     </div>
-  </div>
+    <%}else{%>
+      <div class="card" style="width: 18rem;">
+        <img class="card-img-top" src="http://gondwanaclub.com/wp-content/uploads/2017/04/dummy-400x250.jpg" alt="Card image cap">
+        <div class="card-body">
+          <h5 class="card-title"><%= msg %></h5>
+          <p class="card-text"><%= msg %></p>
+          <h6>Rp<%= msg%></h6>
+          <b> <%= msg%></b>
+        </div>
+      </div>
+    <%}%>
+
   <br>
   <% } %>
 </div>

@@ -44,10 +44,10 @@ app.post('/login', function(req, res) {
       fullName: req.body.fullName
     }
   }).then((data) => {
-    if (data == 0) {
+    if (data === 0) {
       console.log('data kosong');
       res.redirect('/')
-    }else if (data.password === req.body.password) {
+    } else if (data.password === req.body.password) {
       if (data.isAdmin === true) {
         req.session.admin = data.isAdmin
         res.redirect('/panel')
@@ -56,10 +56,10 @@ app.post('/login', function(req, res) {
 
       res.redirect('/product')
       res.end()
+    } else {
+      res.redirect('/')
+      res.end()
     }
-    res.redirect('/')
-    res.end()
-
 
   }).catch((err) => {
     console.log(err);
@@ -69,25 +69,46 @@ app.post('/login', function(req, res) {
 
 //panel admin
 app.get('/panel', (req, res) => {
-  if (!req.session.admin) {
-    res.redirect('/')
-  }
+  // if (!req.session.admin) {
+  //   res.redirect('/')
+  // }
   order.findAll({
-    include : [{model: user}, {model: product}],
-    order : [['createdAt', 'DESC']]
+    include: [{
+      model: user
+    }, {
+      model: product
+    }],
+    order: [
+      ['createdAt', 'DESC']
+    ]
 
-  }).then((data)=>{
-    // res.send(data)
-    console.log('transaksi :',data.length)
-    console.log(data.length)
+  }).then((data) => {
+    // res.send(data[1].Product)
+    console.log('transaksi :', data.length)
+    // console.log(data.Product)
+    // console.log(data.length)
     var arr = []
     for (d of data) {
       d.statusOrder === true ? d.statusOrder = 'SUDAH' : d.statusOrder = 'belum'
-      console.log(`${d.User.fullName} membeli ${d.Product.productName} dengan harga ${d.Product.price} di kirim ke : ${d.User.address} status pembayaran ${d.statusOrder}`);
-      arr.push([d.User.fullName,d.Product.productName,d.Product.price,d.User.address,d.statusOrder])
+      if (!d.Product) {
+        let x = 'product dihapus'
+        d.Product = {
+          id: x,
+          productName: x,
+          description: x,
+          price: x,
+          createdAt: x,
+          updatedAt: x,
+        }
+      }
+      // console.log(`${d.User.fullName} membeli ${d.Product.productName} dengan harga ${d.Product.price} di kirim ke : ${d.User.address} status pembayaran ${d.statusOrder}`);
+      arr.push([d.User.fullName, d.Product.productName, d.Product.price, d.User.address, d.statusOrder])
     }
-    console.log(arr);
-    res.render('pages/panel',{data : arr})
+    // console.log(arr);
+
+    res.render('pages/panel', {
+      data: arr
+    })
   })
 })
 
@@ -115,8 +136,10 @@ app.get('/panel/product', (req, res) => {
     res.redirect('/')
   }
   product.findAll({
-    order : [['createdAt', 'DESC']]
-    
+    order: [
+      ['createdAt', 'DESC']
+    ]
+
   }).then((products) => {
     res.render('pages/admin-product-list.ejs', {
       products
@@ -180,46 +203,52 @@ app.post('/order/:productId', (req, res) => {
 
 })
 //ganti status orderan bayar
-app.post('/status-order/:orderId',(req,res)=>{
+app.post('/status-order/:orderId', (req, res) => {
   if (!req.session.user) {
     res.redirect('/')
   }
   order.findOne({
-    where :{
-      costumerId : req.session.user,
-      id : req.params.orderId
+    where: {
+      costumerId: req.session.user,
+      id: req.params.orderId
     }
-  }).then((data)=>{
+  }).then((data) => {
     if (data === null) {
       console.log('data kosong');
     }
     data.update({
-      statusOrder : true
-    }).then((succes)=>{
+      statusOrder: true
+    }).then((succes) => {
       console.log('succes ganti status');
       res.redirect('/orders')
     })
   })
 })
 //delete status
-app.post('/delete-order/:orderId',(req,res)=>{
-if (!req.session.user) {
-  res.redirect('/')
-}
+app.post('/delete-order/:orderId', (req, res) => {
+  if (!req.session.user) {
+    res.redirect('/')
+  }
   order.destroy({
-    where :{
-      costumerId : req.session.user,
-      id : req.params.orderId
+    where: {
+      costumerId: req.session.user,
+      id: req.params.orderId
     }
-  }).then((data)=>{
+  }).then((data) => {
     console.log('berhasil di hapus');
-      res.redirect('/orders')
+    res.redirect('/orders')
   })
 })
 
 //create product
-app.get('/panel/create-product', (req,res)=>{
-  res.render('pages/create-product.ejs')
+app.get('/panel/create-product', (req, res) => {
+  if (!req.session.admin) {
+    res.redirect('/')
+    res.end()
+  } else {
+    res.render('pages/create-product.ejs')
+
+  }
 })
 
 app.post('/create-product', (req, res) => {
@@ -240,7 +269,7 @@ app.post('/create-product', (req, res) => {
 })
 
 
-//destroy
+//destroy user
 app.post('/user/:id', (req, res) => {
   var id = req.params.id
   user.destroy({
@@ -255,6 +284,21 @@ app.post('/user/:id', (req, res) => {
   })
 })
 
+//delete products
+app.post('/delete/:id', (req, res) => {
+  var id = req.params.id
+  product.destroy({
+    where: {
+      id: id
+    }
+  }).then((data) => {
+    console.log(data);
+    res.redirect('/panel/product')
+  }).catch((err) => {
+    console.log(err);
+  })
+})
+
 ///cart
 app.get('/orders', (req, res) => {
   if (!req.session.user) {
@@ -263,7 +307,7 @@ app.get('/orders', (req, res) => {
   order.findAll({
     where: {
       costumerId: req.session.user,
-      statusOrder : false
+      statusOrder: false
     },
     include: [{
       model: product
@@ -273,22 +317,20 @@ app.get('/orders', (req, res) => {
   }).then(function(data) {
     console.log(data.length);
 
-
+    res.render('pages/myorder.ejs',{data : data, msg : 'data telah dihapus admin'})
     // res.send(data)
-    res.render('pages/myorder', {
-      data: data
-    })
+
   })
 })
 
 app.get('/payed', (req, res) => {
-  if (!req.session.user) {
-    res.redirect('/')
-  }
+  // if (!req.session.user) {
+  //   res.redirect('/')
+  // }
   order.findAll({
     where: {
-      costumerId: req.session.user,
-      statusOrder : true
+      costumerId: req.session.user || 8,
+      statusOrder: true
     },
     include: [{
       model: product
@@ -301,9 +343,10 @@ app.get('/payed', (req, res) => {
     for (var i in data) {
       arr.push(data[i].Product);
     }
-    // console.log(arr);
+    // res.send(arr);
     res.render('pages/payed', {
-      beli: arr
+      beli: arr,
+      msg : 'barang sudah di hapus'
     })
   })
 })

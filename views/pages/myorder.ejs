@@ -9,39 +9,72 @@
 <body>
   <div class="container">
 
-  <!-- header here -->
-  <% include ../partials/header.ejs %>
+    <!-- header here -->
+    <% include ../partials/header.ejs %>
 
 
-  <!-- bloc-0 -->
-  <center>
-    <br>
-    <h1>Cart</h1>
-    <h6><i>segera bayar pesanan anda</i></h6>
-  </center>
-<div class="row">
-  <% for( d of data){  %>
-  <div class="card" style="width: 18rem;">
-    <img class="card-img-top" src="http://gondwanaclub.com/wp-content/uploads/2017/04/dummy-400x250.jpg" alt="Card image cap">
-    <div class="card-body">
-      <h5 class="card-title"><%= d.Product.productName %></h5>
-      <p class="card-text"><%= d.Product.description %></p>
-      <h6>Rp<%= d.Product.price %></h6>
-      <form  action="/status-order/<%=d.id %>" method="post">
-        <button type="submit"class="btn btn-primary">bayar</button>
-      </form>
-      <form  action="/delete-order/<%=d.id %>" method="post">
-        <button type="submit"class="btn btn-danger">Delete</button>
-      </form>
+    <!-- bloc-0 -->
+    <center>
+      <br>
+      <h1>Cart</h1>
+      <h6><i>segera bayar pesanan anda</i></h6>
+    </center>
+    <div class="row">
+
+      <% for( d of data){  %>
+        <% if (d.Product != null){%>
+        <div class="card" style="width: 18rem;">
+          <img class="card-img-top" src="http://gondwanaclub.com/wp-content/uploads/2017/04/dummy-400x250.jpg" alt="Card image cap">
+          <div class="card-body">
+            <h5 class="card-title">
+              <%= d.Product.productName  %>
+            </h5>
+            <p class="card-text">
+              <%= d.Product.description %>
+            </p>
+            <h6>Rp
+              <%= d.Product.price %>
+            </h6>
+            <form action="/status-order/<%=d.id %>" method="post">
+              <button type="submit" class="btn btn-primary">bayar</button>
+            </form>
+            <form action="/delete-order/<%=d.id %>" method="post">
+              <button type="submit" class="btn btn-danger">Delete</button>
+            </form>
+          </div>
+        </div>
+        <br>
+
+        <%}else{%>
+
+        <div class="card" style="width: 18rem;">
+          <img class="card-img-top" src="http://gondwanaclub.com/wp-content/uploads/2017/04/dummy-400x250.jpg" alt="Card image cap">
+          <div class="card-body">
+            <h5 class="card-title">
+              <%= msg  %>
+            </h5>
+            <p class="card-text">
+              <%= msg %>
+            </p>
+            <h6>Rp
+              <%= msg %>
+            </h6>
+
+            <form action="/delete-order/<%=d.id %>" method="post">
+              <button type="submit" class="btn btn-danger">Delete</button>
+            </form>
+          </div>
+        </div>
+        <br>
+
+        <%}%>
+
+      <% } %>
     </div>
+
+
+
   </div>
-  <br>
-  <% } %>
-</div>
-
-
-
-</div>
   <!-- main here -->
 
 
