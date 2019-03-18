@@ -6,68 +6,68 @@
   <% include ../partials/head.ejs %>
 
   <meta charset="utf-8">
-      <meta name="keywords" content="">
-      <meta name="description" content="">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-      <link rel="shortcut icon" type="image/png" href="favicon.png">
+  <meta name="keywords" content="">
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <link rel="shortcut icon" type="image/png" href="favicon.png">
 
-  	<link rel="stylesheet" type="text/css" href="./css/bootstrap.min.css">
-  	<link rel="stylesheet" type="text/css" href="style.css">
-  	<link rel="stylesheet" type="text/css" href="./css/font-awesome.min.css">
+  <link rel="stylesheet" type="text/css" href="./css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <link rel="stylesheet" type="text/css" href="./css/font-awesome.min.css">
 
 
-  	<script src="./js/jquery-2.1.0.min.js"></script>
-  	<script src="./js/bootstrap.min.js"></script>
-  	<script src="./js/blocs.min.js"></script>
-  	<script src="./js/jqBootstrapValidation.js"></script>
-  	<script src="./js/formHandler.js"></script>
-  	<script src="./js/lazysizes.min.js" defer></script>
+  <script src="./js/jquery-2.1.0.min.js"></script>
+  <script src="./js/bootstrap.min.js"></script>
+  <script src="./js/blocs.min.js"></script>
+  <script src="./js/jqBootstrapValidation.js"></script>
+  <script src="./js/formHandler.js"></script>
+  <script src="./js/lazysizes.min.js" defer></script>
 </head>
 
 <body>
 
-<div class="container">
-  <!-- header here -->
-  <% include ../partials/nav-admin.ejs %>
-  <div class="page-container">
-    <!-- bloc-0 -->
-    <div class="bloc bgc-white l-bloc " id="bloc-2">
-  	<div class="container bloc-lg">
-  		<div class="row">
-  			<div class="col-sm-12">
-          <center>
-            <h1>Add product</h1>
-          </center>
+  <div class="container">
+    <!-- header here -->
+    <% include ../partials/nav-admin.ejs %>
+    <div class="page-container">
+      <!-- bloc-0 -->
+      <div class="bloc bgc-white l-bloc " id="bloc-2">
+        <div class="container bloc-lg">
+          <div class="row">
+            <div class="col-sm-12">
+              <center>
+                <h1>Add product</h1>
+              </center>
 
-  				<form method="post" action="/create-product">
-  					<div class="form-group">
-  						<label>
-  							Product Name<br>
-  						</label>
-  						<input name="productName" class="form-control" required />
-  					</div>
-  					<div class="form-group">
-  						<label>
-  							Price<br>
-  						</label>
-  						<input name="price"  class="form-control" type="number" required />
-  					</div>
-  					<div class="form-group">
-  						<label>
-  							Description
-  						</label><textarea  name="description" class="form-control" rows="4" cols="50" required></textarea>
-  					</div>
-  					<button class="bloc-button btn btn-d btn-lg btn-block" type="submit">
-  						Add product
-  					</button>
-  				</form>
-  			</div>
-  		</div>
-  	</div>
-  </div>
+              <form method="post" action="/create-product">
+                <div class="form-group">
+                  <label>
+                    Product Name<br>
+                  </label>
+                  <input name="productName" class="form-control" required />
+                </div>
+                <div class="form-group">
+                  <label>
+                    Price<br>
+                  </label>
+                  <input name="price" class="form-control" type="number" required />
+                </div>
+                <div class="form-group">
+                  <label>
+                    Description
+                  </label><textarea name="description" class="form-control" rows="4" cols="50" required></textarea>
+                </div>
+                <button class="bloc-button btn btn-d btn-lg btn-block" type="submit">
+                  Add product
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
 
+    </div>
   </div>
-</div>
 
   <!-- main here -->
 

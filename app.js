@@ -73,7 +73,9 @@ app.get('/panel', (req, res) => {
     res.redirect('/')
   }
   order.findAll({
-    include : [{model: user}, {model: product}]
+    include : [{model: user}, {model: product}],
+    order : [['createdAt', 'DESC']]
+
   }).then((data)=>{
     // res.send(data)
     console.log('transaksi :',data.length)
@@ -112,7 +114,10 @@ app.get('/panel/product', (req, res) => {
   if (!req.session.admin) {
     res.redirect('/')
   }
-  product.findAll().then((products) => {
+  product.findAll({
+    order : [['createdAt', 'DESC']]
+    
+  }).then((products) => {
     res.render('pages/admin-product-list.ejs', {
       products
     })
